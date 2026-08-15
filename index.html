@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards de Medicina</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            flex: 1;
+            width: 100%;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 120px;
+        }
+        
+        .stat-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .form-group { margin-bottom: 20px; }
+        
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success { background: #28a745; }
+        .btn-danger { background: #dc3545; }
+        .btn-warning { background: #ffc107; color: #333; }
+        
+        .flashcard {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px 0;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .flashcard:hover {
+            transform: translateY(-5px);
+        }
+        
+        .flashcard-text {
+            font-size: 1.3em;
+            text-align: center;
+        }
+        
+        .materia-tab {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .materia-tab:hover { 
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .hidden { display: none; }
+        
+        .botoes-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: #667eea;
+            height: 100%;
+            transition: width 0.3s;
+            width: 0%;
+        }
+        
+        /* Rodapé */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: white;
+        }
+        
+        .instagram-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .instagram-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        
+        .instagram-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+        
+        .credit-text {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-top: 10px;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.8em; }
+            .form-container { padding: 20px; }
+            .flashcard { padding: 25px; }
+            .flashcard-text { font-size: 1.1em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Cabeçalho -->
+        <div class="header">
+            <h1>🩺 Flashcards de Medicina</h1>
+            <p style="color: #666;">Crie e estude flashcards de medicina</p>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <div>Total de Flashcards</div>
+                    <div class="stat-number" id="total-flashcards">0</div>
+                </div>
+                <div class="stat-card">
+                    <div>Matérias</div>
+                    <div class="stat-number" id="total-materias">0</div>
+                </div>
+                <div class="stat-card">
+                    <div>Acertos</div>
+                    <div class="stat-number" id="total-acertos" style="color: #28a745;">0</div>
+                </div>
+                <div class="stat-card">
+                    <div>Erros</div>
+                    <div class="stat-number" id="total-erros" style="color: #dc3545;">0</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Formulário -->
+        <div class="form-container">
+            <h2 style="margin-bottom: 20px; color: #333;">📝 Criar Flashcard</h2>
+            
+            <div class="form-group">
+                <label>Matéria:</label>
+                <input type="text" id="materia" placeholder="Ex: Cardiologia, Neurologia, Pediatria...">
+            </div>
+            
+            <div class="form-group">
+                <label>Pergunta:</label>
+                <textarea id="pergunta" placeholder="Digite a pergunta ou conceito..." rows="3"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Resposta:</label>
+                <textarea id="resposta" placeholder="Digite a resposta ou definição..." rows="3"></textarea>
+            </div>
+            
+            <div id="mensagem-feedback"></div>
+            
+            <button onclick="criarFlashcard()">➕ Criar Flashcard</button>
+        </div>
+        
+        <!-- Lista de Matérias -->
+        <h2 style="color: white; margin: 20px 0; text-align: center;">📚 Suas Matérias</h2>
+        <div id="materias-lista"></div>
+        
+        <!-- Modo Estudo -->
+        <div id="modo-estudo" class="hidden">
+            <div class="header" style="margin-bottom: 20px;">
+                <h2 id="materia-atual-titulo" style="margin-bottom: 10px;">📚 Matéria</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <p id="contador">Flashcard 1 de 1</p>
+            </div>
+            
+            <div class="flashcard" id="flashcard" onclick="mostrarResposta()">
+                <div class="flashcard-text" id="flashcard-texto">Clique para começar</div>
+            </div>
+            
+            <div class="botoes-container hidden" id="botoes-resposta">
+                <button class="btn-success" onclick="responder(true)">✅ Acertei</button>
+                <button class="btn-danger" onclick="responder(false)">❌ Errei</button>
+            </div>
+            
+            <div class="botoes-container">
+                <button class="btn-warning" onclick="voltarInicio()">🏠 Voltar</button>
+            </div>
+        </div>
+        
+        <!-- Rodapé -->
+        <div class="footer">
+            <a href="https://www.instagram.com/inteligente_resumo" target="_blank" class="instagram-btn">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+                @inteligente_resumo
+            </a>
+            <p class="credit-text">criado por resumo inteligente</p>
+        </div>
+    </div>
+    
+    <script>
+        // ============ GERENCIADOR DE FLASHCARDS ============
+        
+        // Carregar dados do localStorage
+        let flashcards = JSON.parse(localStorage.getItem('flashcards') || '[]');
+        
+        // Se não houver flashcards, adicionar exemplos
+        if (flashcards.length === 0) {
+            flashcards = [
+                {
+                    id: 1,
+                    materia: 'Cardiologia',
+                    pergunta: 'O que é hipertensão arterial?',
+                    resposta: 'É a elevação persistente da pressão arterial acima de 140/90 mmHg',
+                    acertos: 0,
+                    erros: 0,
+                    dataCriacao: new Date().toLocaleDateString('pt-BR')
+                },
+                {
+                    id: 2,
+                    materia: 'Neurologia',
+                    pergunta: 'Quais são os sinais clássicos de AVC?',
+                    resposta: 'Fraqueza facial, fraqueza nos braços e dificuldade na fala (FAST)',
+                    acertos: 0,
+                    erros: 0,
+                    dataCriacao: new Date().toLocaleDateString('pt-BR')
+                },
+                {
+                    id: 3,
+                    materia: 'Farmacologia',
+                    pergunta: 'Qual o mecanismo de ação da aspirina?',
+                    resposta: 'Inibe a ciclooxigenase (COX), reduzindo a produção de prostaglandinas',
+                    acertos: 0,
+                    erros: 0,
+                    dataCriacao: new Date().toLocaleDateString('pt-BR')
+                }
+            ];
+            salvarDados();
+        }
+        
+        // Variáveis de estudo
+        let flashcardsEstudo = [];
+        let indiceAtual = 0;
+        let materiaAtual = '';
+        let mostrandoResposta = false;
+        
+        // ============ FUNÇÕES PRINCIPAIS ============
+        
+        function salvarDados() {
+            localStorage.setItem('flashcards', JSON.stringify(flashcards));
+            atualizarEstatisticas();
+            mostrarMaterias();
+        }
+        
+        function criarFlashcard() {
+            const materia = document.getElementById('materia').value.trim();
+            const pergunta = document.getElementById('pergunta').value.trim();
+            const resposta = document.getElementById('resposta').value.trim();
+            
+            const feedback = document.getElementById('mensagem-feedback');
+            
+            if (materia && pergunta && resposta) {
+                // Criar novo flashcard
+                const flashcard = {
+                    id: Date.now(), // ID único
+                    materia: materia,
+                    pergunta: pergunta,
+                    resposta: resposta,
+                    acertos: 0,
+                    erros: 0,
+                    dataCriacao: new Date().toLocaleDateString('pt-BR')
+                };
+                
+                flashcards.push(flashcard);
+                salvarDados();
+                
+                // Limpar campos
+                document.getElementById('pergunta').value = '';
+                document.getElementById('resposta').value = '';
+                
+                // Feedback positivo
+                feedback.innerHTML = '<div class="alert alert-success">✅ Flashcard criado com sucesso!</div>';
+                
+                // Animação do botão
+                const btn = document.querySelector('button');
+                btn.textContent = '✅ Criado!';
+                btn.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    btn.textContent = '➕ Criar Flashcard';
+                    btn.style.background = '#667eea';
+                    feedback.innerHTML = '';
+                }, 2000);
+                
+            } else {
+                feedback.innerHTML = '<div class="alert alert-danger">❌ Preencha todos os campos!</div>';
+                
+                setTimeout(() => {
+                    feedback.innerHTML = '';
+                }, 3000);
+            }
+        }
+        
+        function mostrarMaterias() {
+            // Agrupar por matéria
+            const materias = {};
+            flashcards.forEach(fc => {
+                if (!materias[fc.materia]) materias[fc.materia] = [];
+                materias[fc.materia].push(fc);
+            });
+            
+            const lista = document.getElementById('materias-lista');
+            lista.innerHTML = '';
+            
+            if (Object.keys(materias).length === 0) {
+                lista.innerHTML = '<p style="color: white; text-align: center;">Nenhuma matéria criada ainda.</p>';
+                return;
+            }
+            
+            Object.keys(materias).forEach(materia => {
+                const div = document.createElement('div');
+                div.className = 'materia-tab';
+                div.innerHTML = `
+                    <div>
+                        <strong style="color: #667eea;">${materia}</strong>
+                        <span style="color: #666; margin-left: 10px;">${materias[materia].length} flashcards</span>
+                    </div>
+                    <span style="color: #999;">→</span>
+                `;
+                div.onclick = () => estudar(materia);
+                lista.appendChild(div);
+            });
+        }
+        
+        function atualizarEstatisticas() {
+            const total = flashcards.length;
+            const materias = new Set(flashcards.map(fc => fc.materia));
+            const acertos = flashcards.reduce((sum, fc) => sum + (fc.acertos || 0), 0);
+            const erros = flashcards.reduce((sum, fc) => sum + (fc.erros || 0), 0);
+            
+            document.getElementById('total-flashcards').textContent = total;
+            document.getElementById('total-materias').textContent = materias.size;
+            document.getElementById('total-acertos').textContent = acertos;
+            document.getElementById('total-erros').textContent = erros;
+        }
+        
+        // ============ MODO DE ESTUDO ============
+        
+        function estudar(materia) {
+            materiaAtual = materia;
+            flashcardsEstudo = flashcards.filter(fc => fc.materia === materia);
+            indiceAtual = 0;
+            mostrandoResposta = false;
+            
+            if (flashcardsEstudo.length > 0) {
+                // Embaralhar flashcards
+                flashcardsEstudo = embaralhar(flashcardsEstudo);
+                
+                // Mostrar modo estudo
+                document.getElementById('materias-lista').classList.add('hidden');
+                document.getElementById('modo-estudo').classList.remove('hidden');
+                document.getElementById('materia-atual-titulo').textContent = `📚 ${materia}`;
+                
+                mostrarFlashcard();
+            }
+        }
+        
+        function mostrarFlashcard() {
+            const fc = flashcardsEstudo[indiceAtual];
+            const texto = document.getElementById('flashcard-texto');
+            
+            texto.textContent = fc.pergunta;
+            texto.dataset.resposta = fc.resposta;
+            texto.style.color = '#333';
+            
+            mostrandoResposta = false;
+            
+            // Esconder botões de resposta
+            document.getElementById('botoes-resposta').classList.add('hidden');
+            
+            // Atualizar progresso
+            atualizarProgresso();
+        }
+        
+        function mostrarResposta() {
+            const texto = document.getElementById('flashcard-texto');
+            
+            if (!mostrandoResposta) {
+                texto.textContent = texto.dataset.resposta;
+                texto.style.color = '#28a745';
+                mostrandoResposta = true;
+                
+                // Mostrar botões de resposta
+                document.getElementById('botoes-resposta').classList.remove('hidden');
+            }
+        }
+        
+        function responder(acertou) {
+            const fc = flashcardsEstudo[indiceAtual];
+            
+            // Atualizar estatísticas
+            const flashcardOriginal = flashcards.find(f => f.id === fc.id);
+            if (flashcardOriginal) {
+                if (acertou) {
+                    flashcardOriginal.acertos = (flashcardOriginal.acertos || 0) + 1;
+                } else {
+                    flashcardOriginal.erros = (flashcardOriginal.erros || 0) + 1;
+                }
+            }
+            
+            salvarDados();
+            
+            // Avançar para próximo
+            indiceAtual++;
+            
+            if (indiceAtual < flashcardsEstudo.length) {
+                mostrarFlashcard();
+            } else {
+                finalizarEstudo();
+            }
+        }
+        
+        function finalizarEstudo() {
+            const container = document.getElementById('modo-estudo');
+            container.innerHTML = `
+                <div class="header" style="margin-bottom: 20px;">
+                    <h1 style="font-size: 3em;">🎉</h1>
+                    <h2>Estudo Concluído!</h2>
+                    <p style="margin: 20px 0; color: #666;">
+                        Você completou todos os ${flashcardsEstudo.length} flashcards de ${materiaAtual}!
+                    </p>
+                </div>
+                <div class="botoes-container">
+                    <button class="btn-success" onclick="voltarInicio()">📚 Voltar ao Início</button>
+                    <button onclick="estudar('${materiaAtual}')">🔄 Estudar Novamente</button>
+                </div>
+            `;
+        }
+        
+        function voltarInicio() {
+            document.getElementById('materias-lista').classList.remove('hidden');
+            document.getElementById('modo-estudo').classList.add('hidden');
+            
+            // Restaurar conteúdo original do modo estudo
+            document.getElementById('modo-estudo').innerHTML = `
+                <div class="header" style="margin-bottom: 20px;">
+                    <h2 id="materia-atual-titulo" style="margin-bottom: 10px;">📚 Matéria</h2>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <p id="contador">Flashcard 1 de 1</p>
+                </div>
+                
+                <div class="flashcard" id="flashcard" onclick="mostrarResposta()">
+                    <div class="flashcard-text" id="flashcard-texto">Clique para começar</div>
+                </div>
+                
+                <div class="botoes-container hidden" id="botoes-resposta">
+                    <button class="btn-success" onclick="responder(true)">✅ Acertei</button>
+                    <button class="btn-danger" onclick="responder(false)">❌ Errei</button>
+                </div>
+                
+                <div class="botoes-container">
+                    <button class="btn-warning" onclick="voltarInicio()">🏠 Voltar</button>
+                </div>
+            `;
+            
+            mostrarMaterias();
+        }
+        
+        function atualizarProgresso() {
+            const progresso = ((indiceAtual) / flashcardsEstudo.length) * 100;
+            document.getElementById('progress-fill').style.width = progresso + '%';
+            document.getElementById('contador').textContent = 
+                `Flashcard ${indiceAtual + 1} de ${flashcardsEstudo.length}`;
+        }
+        
+        // ============ FUNÇÕES AUXILIARES ============
+        
+        function embaralhar(array) {
+            const novoArray = [...array];
+            for (let i = novoArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [novoArray[i], novoArray[j]] = [novoArray[j], novoArray[i]];
+            }
+            return novoArray;
+        }
+        
+        // ============ ATALHOS DE TECLADO ============
+        
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+Enter para criar flashcard
+            if (e.key === 'Enter' && e.ctrlKey) {
+                e.preventDefault();
+                criarFlashcard();
+            }
+            
+            // Espaço para mostrar resposta
+            if (e.key === ' ' && !document.getElementById('modo-estudo').classList.contains('hidden')) {
+                e.preventDefault();
+                mostrarResposta();
+            }
+            
+            // ESC para voltar
+            if (e.key === 'Escape' && !document.getElementById('modo-estudo').classList.contains('hidden')) {
+                voltarInicio();
+            }
+        });
+        
+        // ============ INICIALIZAÇÃO ============
+        
+        atualizarEstatisticas();
+        mostrarMaterias();
+    </script>
+</body>
+</html>
