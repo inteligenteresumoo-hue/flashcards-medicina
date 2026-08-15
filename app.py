@@ -4,6 +4,15 @@ import random
 import os
 from datetime import datetime
 
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+# Configurar Firebase
+cred_dict = json.loads(os.environ.get('FIREBASE_CREDENTIALS'))
+cred = credentials.Certificate(cred_dict)
+firebase_admin.initialize_app(cred)
+db = firestore.client()
+
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
@@ -365,41 +374,56 @@ class FlashcardManager:
     def __init__(self):
         self.flashcards = []
         self.materias = {}
-        self.carregar_dados_iniciais()
+        self.carregar_dados()
     
-    def carregar_dados_iniciais(self):
-        # Flashcards de exemplo
-        self.flashcards = [
-            {
-                'id': 1,
-                'materia': 'Cardiologia',
-                'pergunta': 'O que é hipertensão arterial?',
-                'resposta': 'É a elevação persistente da pressão arterial acima de 140/90 mmHg',
-                'acertos': 0,
-                'erros': 0
-            },
-            {
-                'id': 2,
-                'materia': 'Neurologia',
-                'pergunta': 'Quais são os sinais clássicos de AVC?',
-                'resposta': 'Fraqueza facial, fraqueza nos braços e dificuldade na fala (FAST)',
-                'acertos': 0,
-                'erros': 0
-            },
-            {
-                'id': 3,
-                'materia': 'Farmacologia',
-                'pergunta': 'Qual o mecanismo de ação da aspirina?',
-                'resposta': 'Inibe a ciclooxigenase (COX), reduzindo a produção de prostaglandinas',
-                'acertos': 0,
-                'erros': 0
-            }
-        ]
-        
-        for fc in self.flashcards:
-            if fc['materia'] not in self.materias:
-                self.materias[fc['materia']] = []
-            self.materias[fc['materia']].append(fc['id'])
+    def carregar_dados(self):
+        try:
+            # Buscar flashcards do Firebase
+            docs = db.collection('flashcards').get()
+            self.flashcards = [doc.to_dict() for doc in docs]
+            
+            # Organizar matérias
+            self.materias = {}
+            for fc in self.flashcards:
+                if fc['materia'] not in self.materias:
+                    self.materias[fc['materia']] = []
+                self.materias[fc['materia']].append(fc['id'])
+        except Exception as e:
+            print(f"Erro ao carregar: {e}")
+            # Se falhar, usar flashcards de exemplo
+            self.flashcards = [
+                {
+                    'id': 1,
+                    'materia': 'Cardiologia',
+                    'pergunta': 'O que é hipertensão arterial?',
+                    'resposta': 'É a elevação persistente da pressão arterial acima de 140/90 mmHg',
+                    'acertos': 0,
+                    'erros': 0
+                },
+                {
+                    'id': 2,
+                    'materia': 'Neurologia',
+                    'pergunta': 'Quais são os sinais clássicos de AVC?',
+                    'resposta': 'Fraqueza facial, fraqueza nos braços e dificuldade na fala (FAST)',
+                    'acertos': 0,
+                    'erros': 0
+                },
+                {
+                    'id': 3,
+                    'materia': 'Farmacologia',
+                    'pergunta': 'Qual o mecanismo de ação da aspirina?',
+                    'resposta': 'Inibe a ciclooxigenase (COX), reduzindo a produção de prostaglandinas',
+                    'acertos': 0,
+                    'erros': 0
+                }
+            ]
+            
+            # Organizar matérias dos flashcards de exemplo
+            self.materias = {}
+            for fc in self.flashcards:
+                if fc['materia'] not in self.materias:
+                    self.materias[fc['materia']] = []
+                self.materias[fc['materia']].append(fc['id'])
     
     def adicionar_flashcard(self, materia, pergunta, resposta):
         flashcard = {
@@ -410,6 +434,14 @@ class FlashcardManager:
             'acertos': 0,
             'erros': 0
         }
+        
+        # Salvar no Firebase
+        try:
+            db.collection('flashcards').add(flashcard)
+        except Exception as e:
+            print(f"Erro ao salvar no Firebase: {e}")
+        
+        # Atualizar lista local
         self.flashcards.append(flashcard)
         
         if materia not in self.materias:
