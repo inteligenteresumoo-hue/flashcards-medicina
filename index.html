@@ -3,322 +3,1156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flashcards de Medicina</title>
+    <title>Flashcards de Medicina - Organização Intuitiva</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ========== DESIGN SYSTEM ========== */
+        :root {
+            /* Tema Claro (padrão) */
+            --primary: #0a1628;
+            --primary-light: #1e2c45;
+            --primary-lighter: #3a4b6a;
+            --secondary: #ffffff;
+            --bg-light: #f4f6f9;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --shadow-sm: 0 1px 3px rgba(10, 22, 40, 0.06);
+            --shadow-md: 0 4px 12px rgba(10, 22, 40, 0.08);
+            --shadow-lg: 0 10px 30px rgba(10, 22, 40, 0.12);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.2s ease;
+            --card-bg: #ffffff;
+            --card-hover-bg: #f8fafc;
+            --input-bg: #ffffff;
+            --input-border: #e2e8f0;
+            --badge-light-bg: #f1f5f9;
+            --badge-light-text: #64748b;
+            --flashcard-bg: #ffffff;
+            --flashcard-text: #1e293b;
+            --modal-overlay: rgba(10, 22, 40, 0.6);
+            --lightbox-bg: rgba(10, 22, 40, 0.9);
+            --progress-bg: #e2e8f0;
+            --stat-hover-bg: #eef2f7;
+            --shortcuts-bg: #f8fafc;
+            --shortcuts-kbd-bg: #ffffff;
+            --shortcuts-kbd-border: #e2e8f0;
+            --shortcuts-kbd-text: #1e293b;
+            --success-bg: #f0fdf4;
+            --success-text: #065f46;
+            --success-border: #bbf7d0;
+            --danger-bg: #fef2f2;
+            --danger-text: #991b1b;
+            --danger-border: #fecaca;
+            --hover-overlay: rgba(10, 22, 40, 0.04);
+            --tab-active-bg: #ffffff;
+            --tab-inactive-bg: transparent;
+            --tab-active-text: #0a1628;
+            --tab-inactive-text: #64748b;
+        }
+
+        /* Tema Escuro */
+        [data-theme="dark"] {
+            --primary: #1e293b;
+            --primary-light: #334155;
+            --primary-lighter: #475569;
+            --secondary: #1e293b;
+            --bg-light: #0f172a;
+            --text-dark: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --card-bg: #1e293b;
+            --card-hover-bg: #263348;
+            --input-bg: #0f172a;
+            --input-border: #334155;
+            --badge-light-bg: #334155;
+            --badge-light-text: #cbd5e1;
+            --flashcard-bg: #1e293b;
+            --flashcard-text: #f1f5f9;
+            --modal-overlay: rgba(0, 0, 0, 0.7);
+            --lightbox-bg: rgba(0, 0, 0, 0.95);
+            --progress-bg: #334155;
+            --stat-hover-bg: #263348;
+            --shortcuts-bg: #0f172a;
+            --shortcuts-kbd-bg: #1e293b;
+            --shortcuts-kbd-border: #334155;
+            --shortcuts-kbd-text: #e2e8f0;
+            --success-bg: #064e3b;
+            --success-text: #6ee7b7;
+            --success-border: #065f46;
+            --danger-bg: #7f1d1d;
+            --danger-text: #fca5a5;
+            --danger-border: #991b1b;
+            --hover-overlay: rgba(255, 255, 255, 0.05);
+            --tab-active-bg: #1e293b;
+            --tab-inactive-bg: transparent;
+            --tab-active-text: #f1f5f9;
+            --tab-inactive-text: #94a3b8;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 0;
             min-height: 100vh;
-            padding: 20px;
             display: flex;
             flex-direction: column;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        
-        .container { 
-            max-width: 800px; 
-            margin: 0 auto; 
+
+        /* ========== TIPOGRAFIA ========== */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap');
+
+        h1, h2, h3, h4 {
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--text-dark);
+        }
+
+        /* ========== CONTAINER ========== */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
             flex: 1;
-            width: 100%;
+            padding: 0 20px;
         }
-        
-        .header {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+
+        /* ========== HEADER COMPACTO ========== */
+        .app-header {
+            background: var(--primary);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-md);
         }
-        
-        .header h1 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-        
-        .stats {
+
+        .app-header-inner {
+            max-width: 1100px;
+            margin: 0 auto;
             display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 20px;
+            align-items: center;
+            justify-content: space-between;
             flex-wrap: wrap;
+            gap: 12px;
         }
-        
-        .stat-card {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            min-width: 120px;
-        }
-        
-        .stat-number {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #667eea;
-        }
-        
-        .form-container {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin: 20px 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .form-group { margin-bottom: 20px; }
-        
-        label { 
-            display: block; 
-            margin-bottom: 8px; 
-            font-weight: bold;
-            color: #555;
-        }
-        
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1em;
-            transition: border-color 0.3s;
-        }
-        
-        input:focus, textarea:focus {
-            border-color: #667eea;
-            outline: none;
-        }
-        
-        button {
-            background: #667eea;
+
+        .app-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: all 0.3s;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
         }
-        
-        button:hover {
-            background: #5a67d8;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+
+        .app-logo span {
+            font-size: 1.4rem;
         }
-        
-        .btn-success { background: #28a745; }
-        .btn-danger { background: #dc3545; }
-        .btn-warning { background: #ffc107; color: #333; }
-        
-        .flashcard {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin: 20px 0;
-            min-height: 200px;
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            transition: var(--transition);
+            color: white;
+            font-size: 1.1rem;
         }
-        
-        .flashcard:hover {
-            transform: translateY(-5px);
+
+        .theme-toggle:hover {
+            background: rgba(255,255,255,0.2);
         }
-        
-        .flashcard-text {
-            font-size: 1.3em;
-            text-align: center;
+
+        /* ========== SISTEMA DE ABAS ========== */
+        .tab-nav {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-light);
+            padding: 6px;
+            border-radius: var(--radius);
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
-        
-        .materia-tab {
-            background: white;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
+
+        .tab-button {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: var(--tab-inactive-bg);
+            color: var(--tab-inactive-text);
+            font-weight: 600;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .tab-button:hover {
+            color: var(--tab-active-text);
+            background: var(--hover-overlay);
+        }
+
+        .tab-button.ativo {
+            background: var(--tab-active-bg);
+            color: var(--tab-active-text);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        /* ========== CONTEÚDO DAS ABAS ========== */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .tab-content.ativo {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== CARDS ========== */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-header {
+            background: var(--card-bg);
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .card-header h2, .card-header h3 {
+            margin: 0;
+            color: var(--text-dark);
+        }
+
+        .card-body {
+            padding: 24px;
+            background: var(--card-bg);
+        }
+
+        /* ========== STATS GRID ========== */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .stat-card {
+            background: var(--bg-light);
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary-lighter);
+            transform: translateY(-2px);
+            background: var(--stat-hover-bg);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .stat-number {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.2;
+            margin-top: 2px;
+        }
+
+        .stat-number.danger { color: var(--danger); }
+        .stat-number.success { color: var(--success); }
+
+        /* ========== BOTÕES ========== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            text-decoration: none;
+            gap: 8px;
+            border: 1px solid transparent;
+        }
+
+        .btn:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-light); transform: translateY(-1px); }
+
+        .btn-success { background: var(--success); color: white; }
+        .btn-success:hover { background: #059669; transform: translateY(-1px); }
+
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-danger:hover { background: #dc2626; transform: translateY(-1px); }
+
+        .btn-warning { background: var(--warning); color: white; }
+        .btn-warning:hover { background: #d97706; transform: translateY(-1px); }
+
+        .btn-info { background: var(--info); color: white; }
+        .btn-info:hover { background: #2563eb; transform: translateY(-1px); }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-dark);
+            border-color: var(--border-color);
+        }
+        .btn-outline:hover {
+            background: var(--bg-light);
+            border-color: var(--text-muted);
+        }
+
+        .btn-sm { padding: 6px 14px; font-size: 0.8rem; }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .btn-group .btn {
+            flex: 1 1 auto;
+            min-width: 100px;
+        }
+
+        /* ========== FORMULÁRIO ========== */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--input-border);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+            background: var(--input-bg);
+            color: var(--text-dark);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(10, 22, 40, 0.08);
+        }
+
+        .image-upload-container {
+            border: 2px dashed var(--input-border);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--bg-light);
+        }
+
+        .image-upload-container:hover {
+            border-color: var(--primary-lighter);
+            background: var(--hover-overlay);
+        }
+
+        .image-upload-container.has-image {
+            border-color: var(--success);
+            background: var(--success-bg);
+        }
+
+        .image-preview {
+            max-width: 160px;
+            max-height: 160px;
+            border-radius: var(--radius-sm);
+            margin: 8px auto 0;
+            display: block;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ========== MATÉRIAS ========== */
+        .materia-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .materia-tab {
+            background: var(--card-bg);
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: var(--transition);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
         }
-        
-        .materia-tab:hover { 
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+
+        .materia-tab:hover {
+            border-color: var(--primary-lighter);
+            transform: translateX(4px);
+            box-shadow: var(--shadow-sm);
+            background: var(--card-hover-bg);
         }
-        
-        .hidden { display: none; }
-        
-        .botoes-container {
+
+        .materia-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 1rem;
+        }
+
+        .materia-meta {
             display: flex;
-            gap: 15px;
-            justify-content: center;
+            align-items: center;
+            gap: 8px;
             flex-wrap: wrap;
-            margin-top: 20px;
         }
-        
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .badge-primary { background: var(--primary); color: white; }
+        .badge-success { background: var(--success); color: white; }
+        .badge-danger { background: var(--danger); color: white; }
+        .badge-warning { background: var(--warning); color: white; }
+        .badge-info { background: var(--info); color: white; }
+        .badge-light {
+            background: var(--badge-light-bg);
+            color: var(--badge-light-text);
+            border: 1px solid var(--border-color);
+        }
+
+        /* ========== FLASHCARD ========== */
+        .flashcard {
+            background: var(--flashcard-bg);
+            border-radius: var(--radius);
+            padding: 40px 32px;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            position: relative;
+            text-align: center;
+        }
+
+        .flashcard:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .flashcard-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            max-width: 100%;
+            word-wrap: break-word;
+            color: var(--flashcard-text);
+        }
+
+        .flashcard-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: var(--radius-sm);
+            margin: 16px 0;
+            box-shadow: var(--shadow-sm);
+            cursor: zoom-in;
+            transition: var(--transition);
+            object-fit: contain;
+        }
+
+        .flashcard-image:hover {
+            transform: scale(1.02);
+        }
+
+        .revisao-info {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: var(--bg-light);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* ========== PROGRESSO ========== */
         .progress-bar {
-            background: #e0e0e0;
-            border-radius: 10px;
-            height: 10px;
-            margin: 10px 0;
+            background: var(--progress-bg);
+            border-radius: 20px;
+            height: 6px;
+            margin: 12px 0;
             overflow: hidden;
         }
-        
+
         .progress-fill {
-            background: #667eea;
+            background: var(--primary);
             height: 100%;
-            transition: width 0.3s;
+            transition: width 0.4s ease;
             width: 0%;
         }
-        
-        /* Rodapé */
+
+        /* ========== ESTATÍSTICAS ========== */
+        .grafico-semanal {
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 160px;
+            padding: 16px 8px;
+            background: var(--bg-light);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            margin: 12px 0;
+        }
+
+        .barra-dia {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .barra-dia:hover {
+            transform: translateY(-4px);
+        }
+
+        .barra-container {
+            width: 100%;
+            max-width: 36px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            height: 120px;
+            justify-content: flex-end;
+        }
+
+        .barra-acertos {
+            width: 100%;
+            background: var(--success);
+            border-radius: 4px 4px 0 0;
+            transition: height 0.4s ease;
+            min-height: 2px;
+        }
+
+        .barra-erros {
+            width: 100%;
+            background: var(--danger);
+            border-radius: 0 0 4px 4px;
+            transition: height 0.4s ease;
+            min-height: 2px;
+        }
+
+        .barra-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .barra-valor {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+        }
+
+        .estatisticas-materia {
+            background: var(--bg-light);
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .estatisticas-materia:hover {
+            border-color: var(--primary-lighter);
+            transform: translateX(4px);
+            background: var(--card-hover-bg);
+        }
+
+        .materia-progress {
+            background: var(--progress-bg);
+            border-radius: 20px;
+            height: 4px;
+            margin: 6px 0;
+            overflow: hidden;
+        }
+
+        .materia-progress-fill {
+            background: var(--success);
+            height: 100%;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        .materia-stats-detalhes {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* ========== MODAL ========== */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--modal-overlay);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 32px;
+            border-radius: var(--radius);
+            max-width: 500px;
+            width: 100%;
+            box-shadow: var(--shadow-lg);
+            animation: fadeIn 0.2s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-content h3 {
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .modal-content p {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .modal-botoes {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        /* ========== LIGHTBOX ========== */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--lightbox-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            cursor: zoom-out;
+            padding: 20px;
+        }
+
+        .lightbox-image {
+            max-width: 95%;
+            max-height: 95%;
+            object-fit: contain;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.4);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* ========== TOOLTIP ========== */
+        .tooltip-grafico {
+            position: fixed;
+            background: var(--primary);
+            color: white;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            pointer-events: none;
+            z-index: 3000;
+            display: none;
+            box-shadow: var(--shadow-md);
+            max-width: 220px;
+        }
+
+        /* ========== FEEDBACK ========== */
+        .alert {
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            margin: 12px 0;
+            text-align: center;
+            font-weight: 500;
+            border: 1px solid transparent;
+        }
+
+        .alert-success {
+            background: var(--success-bg);
+            color: var(--success-text);
+            border-color: var(--success-border);
+        }
+
+        .alert-danger {
+            background: var(--danger-bg);
+            color: var(--danger-text);
+            border-color: var(--danger-border);
+        }
+
+        /* ========== ATALHOS ========== */
+        .shortcuts-bar {
+            background: var(--shortcuts-bg);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            margin-top: 16px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 14px;
+            justify-content: center;
+        }
+
+        .shortcuts-bar kbd {
+            background: var(--shortcuts-kbd-bg);
+            padding: 2px 7px;
+            border-radius: 4px;
+            border: 1px solid var(--shortcuts-kbd-border);
+            font-weight: 600;
+            color: var(--shortcuts-kbd-text);
+            font-size: 0.72rem;
+        }
+
+        /* ========== RODAPÉ ========== */
         .footer {
             text-align: center;
             margin-top: 40px;
-            padding: 20px;
-            color: white;
+            padding: 24px 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
         }
-        
-        .instagram-btn {
+
+        .footer .instagram-btn {
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            background: var(--primary);
             color: white;
-            padding: 12px 25px;
-            border-radius: 25px;
+            padding: 10px 24px;
+            border-radius: var(--radius-sm);
             text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-            margin-bottom: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-weight: 600;
+            transition: var(--transition);
+            margin-bottom: 12px;
+            border: 1px solid transparent;
         }
-        
-        .instagram-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+
+        .footer .instagram-btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
         }
-        
-        .instagram-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: white;
+
+        .footer .instagram-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
         }
-        
+
         .credit-text {
-            font-size: 0.9em;
-            opacity: 0.8;
-            margin-top: 10px;
+            font-size: 0.85rem;
+            opacity: 0.7;
         }
-        
-        .alert {
-            padding: 15px;
-            border-radius: 10px;
-            margin: 10px 0;
-            text-align: center;
-            font-weight: bold;
+
+        /* ========== ESTADOS ========== */
+        .hidden { display: none !important; }
+
+        .flash-acerto {
+            animation: flashGreen 0.4s ease;
         }
-        
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
+
+        .flash-erro {
+            animation: flashRed 0.4s ease;
         }
-        
-        @media (max-width: 600px) {
-            .header h1 { font-size: 1.8em; }
-            .form-container { padding: 20px; }
-            .flashcard { padding: 25px; }
-            .flashcard-text { font-size: 1.1em; }
+
+        @keyframes flashGreen {
+            0%, 100% { background-color: var(--flashcard-bg); }
+            50% { background-color: var(--success-bg); }
+        }
+
+        @keyframes flashRed {
+            0%, 100% { background-color: var(--flashcard-bg); }
+            50% { background-color: var(--danger-bg); }
+        }
+
+        /* ========== RESPONSIVIDADE ========== */
+        @media (max-width: 640px) {
+            .container { padding: 0 12px; }
+            
+            .app-header { padding: 12px 16px; }
+            .app-logo { font-size: 1rem; }
+            
+            .tab-nav { gap: 2px; padding: 4px; }
+            .tab-button { 
+                min-width: 80px; 
+                padding: 10px 12px; 
+                font-size: 0.8rem;
+            }
+            
+            .stat-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .stat-card { padding: 12px; }
+            .stat-number { font-size: 1.3rem; }
+            
+            .card-header { padding: 16px; }
+            .card-body { padding: 16px; }
+            
+            .flashcard { padding: 28px 20px; min-height: 160px; }
+            .flashcard-text { font-size: 1rem; }
+            
+            .grafico-semanal { height: 120px; padding: 12px 4px; gap: 4px; }
+            .barra-container { max-width: 24px; height: 80px; }
+            
+            .materia-tab { flex-direction: column; align-items: flex-start; }
+            .materia-meta { width: 100%; }
+            
+            .modal-content { padding: 24px; margin: 12px; }
+            .modal-botoes { flex-direction: column; }
+            
+            .shortcuts-bar { font-size: 0.7rem; padding: 8px 12px; gap: 4px 8px; }
         }
     </style>
 </head>
 <body>
+    <!-- ====== HEADER FIXO ====== -->
+    <header class="app-header">
+        <div class="app-header-inner">
+            <a href="#" class="app-logo" onclick="alternarAba('estudar'); return false;">
+                @inteligente_resumo
+            </a>
+            <div class="header-actions">
+                <button type="button" class="theme-toggle" id="theme-toggle" onclick="alternarTema()" title="Alternar tema claro/escuro">
+                    🌙
+                </button>
+            </div>
+        </div>
+    </header>
+
     <div class="container">
-        <!-- Cabeçalho -->
-        <div class="header">
-            <h1>🩺 Flashcards de Medicina</h1>
-            <p style="color: #666;">Crie e estude flashcards de medicina</p>
-            
-            <div class="stats">
-                <div class="stat-card">
-                    <div>Total de Flashcards</div>
-                    <div class="stat-number" id="total-flashcards">0</div>
+        <!-- ====== NAVEGAÇÃO POR ABAS ====== -->
+        <nav class="tab-nav" role="tablist">
+            <button class="tab-button ativo" id="tab-estudar" onclick="alternarAba('estudar')" role="tab" aria-selected="true">
+                📚 Estudar
+            </button>
+            <button class="tab-button" id="tab-criar" onclick="alternarAba('criar')" role="tab" aria-selected="false">
+                ➕ Criar
+            </button>
+            <button class="tab-button" id="tab-estatisticas" onclick="alternarAba('estatisticas')" role="tab" aria-selected="false">
+                📊 Estatísticas
+            </button>
+        </nav>
+
+        <!-- ====== ABA ESTUDAR ====== -->
+        <div class="tab-content ativo" id="content-estudar" role="tabpanel">
+            <!-- Stats Rápidos -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="stat-grid">
+                        <div class="stat-card" onclick="alternarAba('estatisticas')">
+                            <div class="stat-label">Total de Cards</div>
+                            <div class="stat-number" id="total-flashcards">0</div>
+                        </div>
+                        <div class="stat-card" onclick="alternarAba('estatisticas')">
+                            <div class="stat-label">Matérias</div>
+                            <div class="stat-number" id="total-materias">0</div>
+                        </div>
+                        <div class="stat-card" onclick="alternarAba('estatisticas')">
+                            <div class="stat-label">Para Revisar</div>
+                            <div class="stat-number danger" id="total-due">0</div>
+                        </div>
+                        <div class="stat-card" onclick="alternarAba('estatisticas')">
+                            <div class="stat-label">Taxa de Acerto</div>
+                            <div class="stat-number success" id="taxa-acerto">0%</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div>Matérias</div>
-                    <div class="stat-number" id="total-materias">0</div>
+            </div>
+
+            <!-- Lista de Matérias -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>📚 Suas Matérias</h2>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="alternarAba('criar')">➕ Novo Card</button>
                 </div>
-                <div class="stat-card">
-                    <div>Acertos</div>
-                    <div class="stat-number" id="total-acertos" style="color: #28a745;">0</div>
+                <div class="card-body">
+                    <div id="materias-lista" class="materia-list"></div>
                 </div>
-                <div class="stat-card">
-                    <div>Erros</div>
-                    <div class="stat-number" id="total-erros" style="color: #dc3545;">0</div>
+            </div>
+
+            <!-- Atalhos -->
+            <div class="shortcuts-bar">
+                <strong>⌨️:</strong>
+                <kbd>Espaço</kbd> Resposta
+                <kbd>1-4</kbd> Avaliar
+                <kbd>Del</kbd> Excluir
+                <kbd>ESC</kbd> Voltar
+                <kbd>T</kbd> Tema
+                <kbd>S</kbd> Estatísticas
+            </div>
+        </div>
+
+        <!-- ====== ABA CRIAR ====== -->
+        <div class="tab-content" id="content-criar" role="tabpanel">
+            <div class="card">
+                <div class="card-header">
+                    <h2>📝 Criar Flashcard</h2>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="alternarAba('estudar')">← Voltar</button>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="materia">Matéria:</label>
+                        <input type="text" id="materia" placeholder="Ex: Cardiologia, Neurologia, Pediatria...">
+                    </div>
+                    <div class="form-group">
+                        <label for="pergunta">Pergunta:</label>
+                        <textarea id="pergunta" placeholder="Digite a pergunta ou conceito..." rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="resposta">Resposta:</label>
+                        <textarea id="resposta" placeholder="Digite a resposta ou definição..." rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Imagem (opcional):</label>
+                        <div class="image-upload-container" id="image-upload-container" onclick="document.getElementById('imagem-input').click()">
+                            <input type="file" id="imagem-input" accept="image/*" style="display: none;" onchange="previewImagem(event)">
+                            <div id="image-upload-placeholder">📁 Clique para adicionar imagem</div>
+                            <img id="image-preview" class="image-preview hidden" alt="Pré-visualização">
+                        </div>
+                        <button type="button" class="btn btn-danger btn-sm hidden" id="btn-remover-imagem" onclick="removerImagem(event)" style="margin-top: 10px;">
+                            🗑️ Remover Imagem
+                        </button>
+                    </div>
+
+                    <div id="mensagem-feedback"></div>
+
+                    <button type="button" class="btn btn-primary" onclick="criarFlashcard()">➕ Criar Flashcard</button>
                 </div>
             </div>
         </div>
-        
-        <!-- Formulário -->
-        <div class="form-container">
-            <h2 style="margin-bottom: 20px; color: #333;">📝 Criar Flashcard</h2>
-            
-            <div class="form-group">
-                <label>Matéria:</label>
-                <input type="text" id="materia" placeholder="Ex: Cardiologia, Neurologia, Pediatria...">
+
+        <!-- ====== ABA ESTATÍSTICAS ====== -->
+        <div class="tab-content" id="content-estatisticas" role="tabpanel">
+            <div class="card">
+                <div class="card-header">
+                    <h2>📊 Estatísticas de Desempenho</h2>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="alternarAba('estudar')">← Voltar</button>
+                </div>
+                <div class="card-body">
+                    <!-- Gráfico -->
+                    <h3>📈 Desempenho dos Últimos 7 Dias</h3>
+                    <div id="grafico-semanal" class="grafico-semanal"></div>
+
+                    <!-- Por matéria -->
+                    <h3 style="margin-top: 24px;">📚 Desempenho por Matéria</h3>
+                    <div id="estatisticas-materias"></div>
+
+                    <!-- Resumo -->
+                    <h3 style="margin-top: 24px;">📋 Resumo Geral</h3>
+                    <div id="resumo-geral" class="stat-grid"></div>
+
+                    <!-- Backup -->
+                    <div style="margin-top: 24px; text-align: center;">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="exportarDados()">📤 Exportar Dados</button>
+                        <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('importar-input').click()">📥 Importar Dados</button>
+                        <input type="file" id="importar-input" accept=".json" style="display: none;" onchange="importarDados(event)">
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">
+                            Último backup: <span id="ultimo-backup">Nunca</span>
+                        </p>
+                    </div>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label>Pergunta:</label>
-                <textarea id="pergunta" placeholder="Digite a pergunta ou conceito..." rows="3"></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label>Resposta:</label>
-                <textarea id="resposta" placeholder="Digite a resposta ou definição..." rows="3"></textarea>
-            </div>
-            
-            <div id="mensagem-feedback"></div>
-            
-            <button onclick="criarFlashcard()">➕ Criar Flashcard</button>
         </div>
-        
-        <!-- Lista de Matérias -->
-        <h2 style="color: white; margin: 20px 0; text-align: center;">📚 Suas Matérias</h2>
-        <div id="materias-lista"></div>
-        
-        <!-- Modo Estudo -->
+
+        <!-- ====== MODO ESTUDO (overlay) ====== -->
         <div id="modo-estudo" class="hidden">
-            <div class="header" style="margin-bottom: 20px;">
-                <h2 id="materia-atual-titulo" style="margin-bottom: 10px;">📚 Matéria</h2>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-fill"></div>
+            <div class="card">
+                <div class="card-header">
+                    <h2 id="materia-atual-titulo" style="margin: 0;">📚 Matéria</h2>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="voltarInicio()">🏠 Voltar</button>
                 </div>
-                <p id="contador">Flashcard 1 de 1</p>
-            </div>
-            
-            <div class="flashcard" id="flashcard" onclick="mostrarResposta()">
-                <div class="flashcard-text" id="flashcard-texto">Clique para começar</div>
-            </div>
-            
-            <div class="botoes-container hidden" id="botoes-resposta">
-                <button class="btn-success" onclick="responder(true)">✅ Acertei</button>
-                <button class="btn-danger" onclick="responder(false)">❌ Errei</button>
-            </div>
-            
-            <div class="botoes-container">
-                <button class="btn-warning" onclick="voltarInicio()">🏠 Voltar</button>
+                <div class="card-body" style="padding: 0;">
+                    <div class="progress-bar" style="margin: 0; border-radius: 0; height: 4px;">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="flashcard" id="flashcard" onclick="mostrarResposta()" style="border: none; border-radius: 0; box-shadow: none;">
+                        <div class="revisao-info" id="revisao-info"></div>
+                        <div id="flashcard-image-container"></div>
+                        <div class="flashcard-text" id="flashcard-texto">Clique para começar</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p id="contador" style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 12px;">Flashcard 0 de 0</p>
+                    <div class="btn-group hidden" id="botoes-resposta">
+                        <button type="button" class="btn btn-danger" onclick="responder(0)">🔴 Errei (1)</button>
+                        <button type="button" class="btn btn-warning" onclick="responder(1)">🟡 Difícil (2)</button>
+                        <button type="button" class="btn btn-success" onclick="responder(2)">🟢 Acertei (3)</button>
+                        <button type="button" class="btn btn-info" onclick="responder(3)">🔵 Fácil (4)</button>
+                        <button type="button" class="btn btn-danger" onclick="excluirFlashcardAtual()">🗑️ Excluir (Del)</button>
+                    </div>
+                </div>
             </div>
         </div>
-        
-        <!-- Rodapé -->
+
+        <!-- ====== LIGHTBOX ====== -->
+        <div id="lightbox" class="lightbox hidden" onclick="fecharLightbox()">
+            <div class="lightbox-close" onclick="fecharLightbox(event)">×</div>
+            <img id="lightbox-image" class="lightbox-image" alt="Visualização ampliada">
+        </div>
+
+        <!-- ====== MODAL ====== -->
+        <div id="modal-confirmacao" class="modal hidden">
+            <div class="modal-content">
+                <h3>🗑️ Excluir Flashcard</h3>
+                <p id="modal-texto">Tem certeza que deseja excluir este flashcard?</p>
+                <div class="modal-botoes">
+                    <button type="button" class="btn btn-danger" onclick="confirmarExclusao()">Sim, Excluir</button>
+                    <button type="button" class="btn btn-outline" onclick="cancelarExclusao()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== TOOLTIP ====== -->
+        <div id="tooltip-grafico" class="tooltip-grafico"></div>
+
+        <!-- ====== RODAPÉ ====== -->
         <div class="footer">
-            <a href="https://www.instagram.com/inteligente_resumo" target="_blank" class="instagram-btn">
+            <a href="https://www.instagram.com/inteligente_resumo" target="_blank" class="instagram-btn" rel="noopener noreferrer">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                 </svg>
@@ -327,320 +1161,1167 @@
             <p class="credit-text">criado por resumo inteligente</p>
         </div>
     </div>
-    
+
     <script>
-        // ============ GERENCIADOR DE FLASHCARDS ============
-        
-        // Carregar dados do localStorage
-        let flashcards = JSON.parse(localStorage.getItem('flashcards') || '[]');
-        
-        // Se não houver flashcards, adicionar exemplos
-        if (flashcards.length === 0) {
-            flashcards = [
-                {
+        'use strict';
+
+        // ============ SISTEMA DE REPETIÇÃO ESPAÇADA + IMAGENS + ESTATÍSTICAS + ABAS ============
+
+        const FATOR_FACILIDADE_INICIAL = 2.5;
+        const FATOR_FACILIDADE_MINIMO = 1.3;
+        const STORAGE_KEY = 'flashcards_medicina';
+        const BACKUP_KEY = 'flashcards_medicina_backup';
+        const THEME_KEY = 'flashcards_medicina_tema';
+        const BACKUP_INTERVALO = 24 * 60 * 60 * 1000;
+        const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+
+        // Cache de imagens em memória
+        const imageCache = new Map();
+
+        // Estado global
+        let flashcards = [];
+        let flashcardsEstudo = [];
+        let indiceAtual = 0;
+        let materiaAtual = '';
+        let mostrandoResposta = false;
+        let flashcardParaExcluir = null;
+        let imagemAtual = null;
+        let abaAtual = 'estudar';
+
+        // ============ FUNÇÕES DE NAVEGAÇÃO POR ABAS ============
+
+        function alternarAba(aba) {
+            abaAtual = aba;
+            
+            // Atualizar botões
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('ativo');
+                btn.setAttribute('aria-selected', 'false');
+            });
+            
+            const botaoAtivo = document.getElementById(`tab-${aba}`);
+            if (botaoAtivo) {
+                botaoAtivo.classList.add('ativo');
+                botaoAtivo.setAttribute('aria-selected', 'true');
+            }
+            
+            // Atualizar conteúdo
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('ativo');
+            });
+            
+            const conteudoAtivo = document.getElementById(`content-${aba}`);
+            if (conteudoAtivo) {
+                conteudoAtivo.classList.add('ativo');
+            }
+            
+            // Esconder modo estudo ao trocar de aba
+            const modoEstudo = document.getElementById('modo-estudo');
+            if (modoEstudo && !modoEstudo.classList.contains('hidden')) {
+                modoEstudo.classList.add('hidden');
+            }
+            
+            // Atualizar estatísticas se estiver na aba de estatísticas
+            if (aba === 'estatisticas') {
+                atualizarGraficoSemanal();
+                atualizarEstatisticasMaterias();
+                atualizarResumoGeral();
+            }
+            
+            // Atualizar lista de matérias se estiver na aba estudar
+            if (aba === 'estudar') {
+                mostrarMaterias();
+            }
+        }
+
+        // ============ FUNÇÕES DE TEMA ============
+
+        function detectarPreferenciaTema() {
+            const temaSalvo = localStorage.getItem(THEME_KEY);
+            if (temaSalvo) return temaSalvo;
+            
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                return 'dark';
+            }
+            
+            return 'light';
+        }
+
+        function aplicarTema(tema) {
+            document.documentElement.setAttribute('data-theme', tema);
+            
+            const botaoTema = document.getElementById('theme-toggle');
+            if (botaoTema) {
+                botaoTema.textContent = tema === 'dark' ? '☀️' : '🌙';
+                botaoTema.title = tema === 'dark' ? 'Alternar para tema claro' : 'Alternar para tema escuro';
+            }
+            
+            localStorage.setItem(THEME_KEY, tema);
+        }
+
+        function alternarTema() {
+            const temaAtual = document.documentElement.getAttribute('data-theme') || 'light';
+            const novoTema = temaAtual === 'dark' ? 'light' : 'dark';
+            aplicarTema(novoTema);
+        }
+
+        function inicializarTema() {
+            const tema = detectarPreferenciaTema();
+            aplicarTema(tema);
+        }
+
+        // ============ FUNÇÕES DE CACHE DE IMAGENS ============
+
+        function cacheImagem(id, imagemBase64) {
+            if (id && imagemBase64) {
+                imageCache.set(id, imagemBase64);
+                if (imageCache.size > 100) {
+                    const primeiraChave = imageCache.keys().next().value;
+                    imageCache.delete(primeiraChave);
+                }
+            }
+        }
+
+        function obterImagemCache(id) {
+            return imageCache.get(id) || null;
+        }
+
+        // ============ FUNÇÕES DE BACKUP ============
+
+        function fazerBackupAutomatico() {
+            try {
+                const agora = new Date();
+                const ultimoBackup = localStorage.getItem(BACKUP_KEY);
+                if (!ultimoBackup || (agora.getTime() - parseInt(ultimoBackup)) > BACKUP_INTERVALO) {
+                    const backup = {
+                        data: agora.toISOString(),
+                        flashcards: flashcards
+                    };
+                    localStorage.setItem(BACKUP_KEY, agora.getTime().toString());
+                    localStorage.setItem(STORAGE_KEY + '_backup', JSON.stringify(backup));
+                    atualizarInfoBackup();
+                }
+            } catch (e) {
+                console.error('Erro ao fazer backup automático:', e);
+            }
+        }
+
+        function atualizarInfoBackup() {
+            const ultimoBackupEl = document.getElementById('ultimo-backup');
+            if (!ultimoBackupEl) return;
+            const ultimoBackup = localStorage.getItem(BACKUP_KEY);
+            if (ultimoBackup) {
+                const dataBackup = new Date(parseInt(ultimoBackup));
+                ultimoBackupEl.textContent = dataBackup.toLocaleString('pt-BR');
+            } else {
+                ultimoBackupEl.textContent = 'Nunca';
+            }
+        }
+
+        function exportarDados() {
+            try {
+                const dadosExportar = {
+                    versao: '5.0',
+                    dataExportacao: new Date().toISOString(),
+                    flashcards: flashcards,
+                    totalCards: flashcards.length,
+                    incluiImagens: flashcards.some(fc => fc.imagem),
+                    estatisticas: gerarEstatisticasGerais()
+                };
+                const blob = new Blob([JSON.stringify(dadosExportar, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `flashcards_medicina_${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                mostrarFeedback('Dados exportados com sucesso!', 'sucesso');
+            } catch (e) {
+                console.error('Erro ao exportar dados:', e);
+                mostrarFeedback('Erro ao exportar dados!', 'erro');
+            }
+        }
+
+        function importarDados(event) {
+            const arquivo = event.target.files[0];
+            if (!arquivo) return;
+            const leitor = new FileReader();
+            leitor.onload = function(e) {
+                try {
+                    const dadosImportados = JSON.parse(e.target.result);
+                    if (!dadosImportados.flashcards || !Array.isArray(dadosImportados.flashcards)) {
+                        throw new Error('Estrutura de dados inválida');
+                    }
+                    const flashcardsValidos = dadosImportados.flashcards
+                        .filter(fc => fc && fc.pergunta && fc.resposta)
+                        .map(normalizarFlashcard);
+                    if (flashcardsValidos.length === 0) {
+                        throw new Error('Nenhum flashcard válido encontrado no arquivo');
+                    }
+                    if (confirm(`Importar ${flashcardsValidos.length} flashcards? Isso substituirá seus dados atuais.`)) {
+                        const backupPreImportacao = {
+                            data: new Date().toISOString(),
+                            flashcards: JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+                        };
+                        localStorage.setItem(STORAGE_KEY + '_backup_pre_import', JSON.stringify(backupPreImportacao));
+                        flashcards = flashcardsValidos;
+                        salvarDados();
+                        imageCache.clear();
+                        mostrarFeedback(`${flashcardsValidos.length} flashcards importados com sucesso!`, 'sucesso');
+                    }
+                } catch (e) {
+                    console.error('Erro ao importar dados:', e);
+                    mostrarFeedback('Erro ao importar: ' + e.message, 'erro');
+                }
+            };
+            leitor.onerror = function() {
+                mostrarFeedback('Erro ao ler arquivo!', 'erro');
+            };
+            leitor.readAsText(arquivo);
+            event.target.value = '';
+        }
+
+        // ============ FUNÇÕES DE ESTATÍSTICAS ============
+
+        function obterUltimos7Dias() {
+            const dias = [];
+            const hoje = new Date();
+            for (let i = 6; i >= 0; i--) {
+                const data = new Date(hoje);
+                data.setDate(hoje.getDate() - i);
+                dias.push({
+                    data: data,
+                    dataStr: data.toISOString().split('T')[0],
+                    label: data.toLocaleDateString('pt-BR', { weekday: 'short' }),
+                    dia: data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+                    acertos: 0,
+                    erros: 0,
+                    total: 0
+                });
+            }
+            return dias;
+        }
+
+        function obterDesempenhoSemanal() {
+            const dias = obterUltimos7Dias();
+            flashcards.forEach(fc => {
+                if (fc.historico && Array.isArray(fc.historico)) {
+                    fc.historico.forEach(registro => {
+                        if (registro && registro.data) {
+                            const dataRegistro = new Date(registro.data).toISOString().split('T')[0];
+                            const diaEncontrado = dias.find(d => d.dataStr === dataRegistro);
+                            if (diaEncontrado) {
+                                if (registro.qualidade >= 2) {
+                                    diaEncontrado.acertos++;
+                                } else {
+                                    diaEncontrado.erros++;
+                                }
+                                diaEncontrado.total++;
+                            }
+                        }
+                    });
+                }
+            });
+            return dias;
+        }
+
+        function atualizarGraficoSemanal() {
+            const container = document.getElementById('grafico-semanal');
+            if (!container) return;
+            const dadosSemanais = obterDesempenhoSemanal();
+            const maxTotal = Math.max(...dadosSemanais.map(d => d.total), 1);
+            container.innerHTML = '';
+            dadosSemanais.forEach(dia => {
+                const barraDia = document.createElement('div');
+                barraDia.className = 'barra-dia';
+                const alturaAcertos = (dia.acertos / maxTotal) * 100;
+                const alturaErros = (dia.erros / maxTotal) * 100;
+                barraDia.innerHTML = `
+                    <div class="barra-container">
+                        <div class="barra-valor">${dia.acertos > 0 ? dia.acertos : ''}</div>
+                        <div class="barra-acertos" style="height: ${alturaAcertos}%; min-height: ${dia.acertos > 0 ? '5px' : '0px'};"></div>
+                        <div class="barra-erros" style="height: ${alturaErros}%; min-height: ${dia.erros > 0 ? '5px' : '0px'};"></div>
+                        <div class="barra-valor">${dia.erros > 0 ? dia.erros : ''}</div>
+                    </div>
+                    <div class="barra-label">${dia.dia}</div>
+                `;
+                barraDia.addEventListener('mouseenter', function(e) {
+                    const tooltip = document.getElementById('tooltip-grafico');
+                    if (tooltip) {
+                        const taxa = dia.total > 0 ? Math.round((dia.acertos / dia.total) * 100) : 0;
+                        tooltip.innerHTML = `
+                            <strong>${dia.data.toLocaleDateString('pt-BR', { weekday: 'long' })}</strong><br>
+                            Total: ${dia.total} revisões<br>
+                            ✅ Acertos: ${dia.acertos}<br>
+                            ❌ Erros: ${dia.erros}<br>
+                            Taxa: ${taxa}%
+                        `;
+                        tooltip.style.display = 'block';
+                        tooltip.style.left = (e.clientX + 10) + 'px';
+                        tooltip.style.top = (e.clientY - 10) + 'px';
+                    }
+                });
+                barraDia.addEventListener('mouseleave', function() {
+                    const tooltip = document.getElementById('tooltip-grafico');
+                    if (tooltip) tooltip.style.display = 'none';
+                });
+                container.appendChild(barraDia);
+            });
+        }
+
+        function atualizarEstatisticasMaterias() {
+            const container = document.getElementById('estatisticas-materias');
+            if (!container) return;
+            container.innerHTML = '';
+            const materias = {};
+            flashcards.forEach(fc => {
+                const materia = fc.materia || 'Geral';
+                if (!materias[materia]) {
+                    materias[materia] = {
+                        total: 0,
+                        acertos: 0,
+                        erros: 0,
+                        paraRevisar: 0,
+                        comImagem: 0,
+                        nivelMedio: 0
+                    };
+                }
+                materias[materia].total++;
+                materias[materia].acertos += fc.acertos || 0;
+                materias[materia].erros += fc.erros || 0;
+                materias[materia].nivelMedio += fc.repeticao || 0;
+                if (estaParaRevisar(fc)) materias[materia].paraRevisar++;
+                if (fc.imagem) materias[materia].comImagem++;
+            });
+            if (Object.keys(materias).length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Nenhuma matéria criada ainda.</p>';
+                return;
+            }
+            Object.keys(materias).sort().forEach(materia => {
+                const stats = materias[materia];
+                const totalRespostas = stats.acertos + stats.erros;
+                const taxaAcerto = totalRespostas > 0 ? Math.round((stats.acertos / totalRespostas) * 100) : 0;
+                const nivelMedio = stats.total > 0 ? Math.round(stats.nivelMedio / stats.total * 10) / 10 : 0;
+                const div = document.createElement('div');
+                div.className = 'estatisticas-materia';
+                div.onclick = () => {
+                    alternarAba('estudar');
+                    setTimeout(() => estudar(materia), 100);
+                };
+                div.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <strong style="color: var(--text-dark);">${materia}</strong>
+                        <span style="font-size: 0.9em; color: var(--text-muted);">
+                            ${stats.total} cards | ${stats.paraRevisar} para revisar
+                        </span>
+                    </div>
+                    <div class="materia-progress">
+                        <div class="materia-progress-fill" style="width: ${taxaAcerto}%;"></div>
+                    </div>
+                    <div class="materia-stats-detalhes">
+                        <span>✅ ${stats.acertos} acertos</span>
+                        <span>❌ ${stats.erros} erros</span>
+                        <span>📊 ${taxaAcerto}% taxa</span>
+                        <span>📈 Nível ${nivelMedio}</span>
+                        ${stats.comImagem > 0 ? `<span>🖼️ ${stats.comImagem} imgs</span>` : ''}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function atualizarResumoGeral() {
+            const container = document.getElementById('resumo-geral');
+            if (!container) return;
+            const totalCards = flashcards.length;
+            const totalAcertos = flashcards.reduce((sum, fc) => sum + (fc.acertos || 0), 0);
+            const totalErros = flashcards.reduce((sum, fc) => sum + (fc.erros || 0), 0);
+            const totalRevisoes = totalAcertos + totalErros;
+            const taxaGlobal = totalRevisoes > 0 ? Math.round((totalAcertos / totalRevisoes) * 100) : 0;
+            const hoje = new Date().toISOString().split('T')[0];
+            let revisoesHoje = 0;
+            flashcards.forEach(fc => {
+                if (fc.historico && Array.isArray(fc.historico)) {
+                    fc.historico.forEach(reg => {
+                        if (reg.data && new Date(reg.data).toISOString().split('T')[0] === hoje) {
+                            revisoesHoje++;
+                        }
+                    });
+                }
+            });
+            container.innerHTML = `
+                <div class="stat-card" style="cursor: default;">
+                    <div class="stat-label">Total de Cards</div>
+                    <div class="stat-number">${totalCards}</div>
+                </div>
+                <div class="stat-card" style="cursor: default;">
+                    <div class="stat-label">Total de Revisões</div>
+                    <div class="stat-number">${totalRevisoes}</div>
+                </div>
+                <div class="stat-card" style="cursor: default;">
+                    <div class="stat-label">Taxa Global</div>
+                    <div class="stat-number success">${taxaGlobal}%</div>
+                </div>
+                <div class="stat-card" style="cursor: default;">
+                    <div class="stat-label">Revisões Hoje</div>
+                    <div class="stat-number" style="color: var(--info);">${revisoesHoje}</div>
+                </div>
+            `;
+        }
+
+        function gerarEstatisticasGerais() {
+            const totalCards = flashcards.length;
+            const totalAcertos = flashcards.reduce((sum, fc) => sum + (fc.acertos || 0), 0);
+            const totalErros = flashcards.reduce((sum, fc) => sum + (fc.erros || 0), 0);
+            const totalRevisoes = totalAcertos + totalErros;
+            const taxaGlobal = totalRevisoes > 0 ? Math.round((totalAcertos / totalRevisoes) * 100) : 0;
+            return {
+                totalCards,
+                totalAcertos,
+                totalErros,
+                totalRevisoes,
+                taxaGlobal,
+                materias: Object.keys(flashcards.reduce((acc, fc) => {
+                    acc[fc.materia || 'Geral'] = true;
+                    return acc;
+                }, {})).length
+            };
+        }
+
+        // ============ FUNÇÕES DE IMAGEM ============
+
+        function previewImagem(event) {
+            const arquivo = event.target.files[0];
+            if (!arquivo) return;
+            if (arquivo.size > MAX_IMAGE_SIZE) {
+                mostrarFeedback('Imagem muito grande! Tamanho máximo: 5MB', 'erro');
+                event.target.value = '';
+                return;
+            }
+            if (!arquivo.type.startsWith('image/')) {
+                mostrarFeedback('Por favor, selecione um arquivo de imagem válido!', 'erro');
+                event.target.value = '';
+                return;
+            }
+            const leitor = new FileReader();
+            leitor.onload = function(e) {
+                imagemAtual = e.target.result;
+                const container = document.getElementById('image-upload-container');
+                const preview = document.getElementById('image-preview');
+                const placeholder = document.getElementById('image-upload-placeholder');
+                const btnRemover = document.getElementById('btn-remover-imagem');
+                if (container) container.classList.add('has-image');
+                if (placeholder) placeholder.textContent = '📁 Clique para trocar imagem';
+                if (preview) {
+                    preview.src = imagemAtual;
+                    preview.classList.remove('hidden');
+                }
+                if (btnRemover) btnRemover.classList.remove('hidden');
+            };
+            leitor.onerror = function() {
+                mostrarFeedback('Erro ao carregar imagem!', 'erro');
+            };
+            leitor.readAsDataURL(arquivo);
+        }
+
+        function removerImagem(event) {
+            if (event) event.stopPropagation();
+            imagemAtual = null;
+            const container = document.getElementById('image-upload-container');
+            const preview = document.getElementById('image-preview');
+            const placeholder = document.getElementById('image-upload-placeholder');
+            const btnRemover = document.getElementById('btn-remover-imagem');
+            const inputImagem = document.getElementById('imagem-input');
+            if (container) container.classList.remove('has-image');
+            if (placeholder) placeholder.textContent = '📁 Clique para adicionar imagem';
+            if (preview) {
+                preview.src = '';
+                preview.classList.add('hidden');
+            }
+            if (btnRemover) btnRemover.classList.add('hidden');
+            if (inputImagem) inputImagem.value = '';
+        }
+
+        function abrirLightbox(imagemSrc) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+            if (lightbox && lightboxImage) {
+                lightboxImage.src = imagemSrc;
+                lightbox.classList.remove('hidden');
+            }
+        }
+
+        function fecharLightbox(event) {
+            if (event) event.stopPropagation();
+            const lightbox = document.getElementById('lightbox');
+            if (lightbox) lightbox.classList.add('hidden');
+        }
+
+        // ============ FUNÇÕES DE UTILIDADE ============
+
+        function normalizarFlashcard(fc) {
+            const flashcardNormalizado = {
+                id: fc.id || Date.now() + Math.random(),
+                materia: fc.materia || 'Geral',
+                pergunta: fc.pergunta || '',
+                resposta: fc.resposta || '',
+                acertos: Number(fc.acertos) || 0,
+                erros: Number(fc.erros) || 0,
+                dataCriacao: fc.dataCriacao || new Date().toLocaleDateString('pt-BR'),
+                repeticao: Number(fc.repeticao) || 0,
+                intervalo: Number(fc.intervalo) || 0,
+                fatorFacilidade: Number(fc.fatorFacilidade) || FATOR_FACILIDADE_INICIAL,
+                proximaRevisao: fc.proximaRevisao || new Date().toISOString(),
+                historico: Array.isArray(fc.historico) ? fc.historico : [],
+                imagem: fc.imagem || null
+            };
+            if (flashcardNormalizado.imagem) {
+                cacheImagem(flashcardNormalizado.id, flashcardNormalizado.imagem);
+            }
+            return flashcardNormalizado;
+        }
+
+        function carregarDados() {
+            try {
+                const dadosSalvos = localStorage.getItem(STORAGE_KEY);
+                if (!dadosSalvos) return [];
+                const dados = JSON.parse(dadosSalvos);
+                if (!Array.isArray(dados)) return [];
+                return dados
+                    .filter(fc => fc && fc.pergunta && fc.resposta)
+                    .map(normalizarFlashcard);
+            } catch (e) {
+                console.error('Erro ao carregar dados:', e);
+                try {
+                    const backup = localStorage.getItem(STORAGE_KEY + '_backup');
+                    if (backup) {
+                        const dadosBackup = JSON.parse(backup);
+                        if (dadosBackup.flashcards && Array.isArray(dadosBackup.flashcards)) {
+                            console.log('Recuperando dados do backup...');
+                            return dadosBackup.flashcards
+                                .filter(fc => fc && fc.pergunta && fc.resposta)
+                                .map(normalizarFlashcard);
+                        }
+                    }
+                } catch (backupError) {
+                    console.error('Erro ao recuperar backup:', backupError);
+                }
+                return [];
+            }
+        }
+
+        function salvarDados() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(flashcards));
+            } catch (e) {
+                console.error('Erro ao salvar dados:', e);
+                mostrarFeedback('Erro ao salvar dados! Verifique o armazenamento do navegador.', 'erro');
+            }
+            atualizarEstatisticas();
+            mostrarMaterias();
+            fazerBackupAutomatico();
+            
+            // Atualizar estatísticas se estiver visível
+            if (abaAtual === 'estatisticas') {
+                atualizarGraficoSemanal();
+                atualizarEstatisticasMaterias();
+                atualizarResumoGeral();
+            }
+        }
+
+        function mostrarFeedback(mensagem, tipo = 'sucesso') {
+            const feedback = document.getElementById('mensagem-feedback');
+            if (!feedback) return;
+            const classe = tipo === 'sucesso' ? 'alert-success' : 'alert-danger';
+            const icone = tipo === 'sucesso' ? '✅' : '❌';
+            feedback.innerHTML = `<div class="alert ${classe}">${icone} ${mensagem}</div>`;
+            clearTimeout(feedback.timeoutId);
+            feedback.timeoutId = setTimeout(() => {
+                feedback.innerHTML = '';
+            }, 3000);
+        }
+
+        function estaParaRevisar(flashcard) {
+            if (!flashcard.proximaRevisao) return true;
+            const agora = new Date();
+            const proximaRevisao = new Date(flashcard.proximaRevisao);
+            return proximaRevisao <= agora;
+        }
+
+        function tocarSom(tipo) {
+            try {
+                const audioContext = new(window.AudioContext || window.webkitAudioContext)();
+                const oscilador = audioContext.createOscillator();
+                const ganho = audioContext.createGain();
+                oscilador.connect(ganho);
+                ganho.connect(audioContext.destination);
+                if (tipo === 'acerto') {
+                    oscilador.frequency.value = 880;
+                    ganho.gain.value = 0.1;
+                    oscilador.start();
+                    oscilador.stop(audioContext.currentTime + 0.1);
+                } else if (tipo === 'erro') {
+                    oscilador.frequency.value = 440;
+                    ganho.gain.value = 0.1;
+                    oscilador.start();
+                    oscilador.stop(audioContext.currentTime + 0.2);
+                }
+            } catch (e) { /* Silenciosamente ignorar erro de áudio */ }
+        }
+
+        // ============ FUNÇÕES PRINCIPAIS ============
+
+        function criarFlashcard() {
+            const materiaInput = document.getElementById('materia');
+            const perguntaInput = document.getElementById('pergunta');
+            const respostaInput = document.getElementById('resposta');
+            if (!materiaInput || !perguntaInput || !respostaInput) return;
+            const materia = materiaInput.value.trim();
+            const pergunta = perguntaInput.value.trim();
+            const resposta = respostaInput.value.trim();
+            if (!materia || !pergunta || !resposta) {
+                mostrarFeedback('Preencha todos os campos!', 'erro');
+                return;
+            }
+            const novoFlashcard = {
+                id: Date.now() + Math.random(),
+                materia: materia,
+                pergunta: pergunta,
+                resposta: resposta,
+                acertos: 0,
+                erros: 0,
+                dataCriacao: new Date().toLocaleDateString('pt-BR'),
+                repeticao: 0,
+                intervalo: 0,
+                fatorFacilidade: FATOR_FACILIDADE_INICIAL,
+                proximaRevisao: new Date().toISOString(),
+                historico: [],
+                imagem: imagemAtual
+            };
+            flashcards.push(novoFlashcard);
+            if (imagemAtual) {
+                cacheImagem(novoFlashcard.id, imagemAtual);
+            }
+            salvarDados();
+            perguntaInput.value = '';
+            respostaInput.value = '';
+            removerImagem();
+            mostrarFeedback('Flashcard criado com sucesso!', 'sucesso');
+            
+            // Voltar para aba estudar após criar
+            setTimeout(() => {
+                alternarAba('estudar');
+            }, 800);
+        }
+
+        function mostrarMaterias() {
+            const lista = document.getElementById('materias-lista');
+            if (!lista) return;
+            lista.innerHTML = '';
+            if (flashcards.length === 0) {
+                lista.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 20px;">Nenhuma matéria criada ainda. Clique em "Criar" para começar!</p>';
+                return;
+            }
+            const materias = {};
+            flashcards.forEach(fc => {
+                const materia = fc.materia || 'Geral';
+                if (!materias[materia]) materias[materia] = [];
+                materias[materia].push(fc);
+            });
+            Object.keys(materias).sort().forEach(materia => {
+                const total = materias[materia].length;
+                const paraRevisar = materias[materia].filter(fc => estaParaRevisar(fc)).length;
+                const comImagem = materias[materia].filter(fc => fc.imagem).length;
+                const div = document.createElement('div');
+                div.className = 'materia-tab';
+                div.setAttribute('role', 'button');
+                div.setAttribute('tabindex', '0');
+                div.innerHTML = `
+                    <div class="materia-name">${materia}</div>
+                    <div class="materia-meta">
+                        <span class="badge badge-light">${total} cards</span>
+                        ${comImagem > 0 ? `<span class="badge badge-info">🖼️ ${comImagem}</span>` : ''}
+                        ${paraRevisar > 0 ? `<span class="badge badge-danger">${paraRevisar} revisar</span>` : ''}
+                        <span style="color: var(--text-muted);">→</span>
+                    </div>
+                `;
+                div.onclick = () => estudar(materia);
+                div.onkeydown = (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        estudar(materia);
+                    }
+                };
+                lista.appendChild(div);
+            });
+        }
+
+        function atualizarEstatisticas() {
+            const total = flashcards.length;
+            const materias = new Set(flashcards.map(fc => fc.materia || 'Geral'));
+            const acertos = flashcards.reduce((sum, fc) => sum + (fc.acertos || 0), 0);
+            const erros = flashcards.reduce((sum, fc) => sum + (fc.erros || 0), 0);
+            const paraRevisar = flashcards.filter(fc => estaParaRevisar(fc)).length;
+            const totalRespostas = acertos + erros;
+            const taxaAcerto = totalRespostas > 0 ? Math.round((acertos / totalRespostas) * 100) : 0;
+            
+            const totalEl = document.getElementById('total-flashcards');
+            const materiasEl = document.getElementById('total-materias');
+            const dueEl = document.getElementById('total-due');
+            const taxaEl = document.getElementById('taxa-acerto');
+            
+            if (totalEl) totalEl.textContent = total;
+            if (materiasEl) materiasEl.textContent = materias.size;
+            if (dueEl) dueEl.textContent = paraRevisar;
+            if (taxaEl) taxaEl.textContent = taxaAcerto + '%';
+        }
+
+        // ============ FUNÇÕES DE REPETIÇÃO ESPAÇADA ============
+
+        function atualizarRepeticaoEspacada(flashcard, qualidade) {
+            if (qualidade >= 2) {
+                flashcard.acertos = (flashcard.acertos || 0) + 1;
+                tocarSom('acerto');
+            } else {
+                flashcard.erros = (flashcard.erros || 0) + 1;
+                tocarSom('erro');
+            }
+            if (qualidade < 2) {
+                flashcard.repeticao = 0;
+                flashcard.intervalo = 1;
+            } else {
+                if (flashcard.repeticao === 0) {
+                    flashcard.intervalo = 1;
+                } else if (flashcard.repeticao === 1) {
+                    flashcard.intervalo = 3;
+                } else {
+                    flashcard.intervalo = Math.max(1, Math.round(flashcard.intervalo * flashcard.fatorFacilidade));
+                }
+                flashcard.repeticao++;
+            }
+            const novoFator = flashcard.fatorFacilidade + (0.1 - (3 - qualidade) * (0.08 + (3 - qualidade) * 0.02));
+            flashcard.fatorFacilidade = Math.max(FATOR_FACILIDADE_MINIMO, novoFator);
+            const proximaData = new Date();
+            proximaData.setDate(proximaData.getDate() + flashcard.intervalo);
+            flashcard.proximaRevisao = proximaData.toISOString();
+            if (!Array.isArray(flashcard.historico)) flashcard.historico = [];
+            flashcard.historico.push({
+                data: new Date().toISOString(),
+                qualidade: qualidade,
+                intervalo: flashcard.intervalo,
+                fatorFacilidade: flashcard.fatorFacilidade
+            });
+        }
+
+        // ============ FUNÇÕES DE EXCLUSÃO ============
+
+        function excluirFlashcardAtual() {
+            if (indiceAtual >= flashcardsEstudo.length) return;
+            flashcardParaExcluir = flashcardsEstudo[indiceAtual];
+            const modal = document.getElementById('modal-confirmacao');
+            const modalTexto = document.getElementById('modal-texto');
+            if (!modal || !modalTexto) return;
+            modalTexto.innerHTML = `
+                <strong>Matéria:</strong> ${flashcardParaExcluir.materia}<br>
+                <strong>Pergunta:</strong> "${flashcardParaExcluir.pergunta.substring(0, 100)}${flashcardParaExcluir.pergunta.length > 100 ? '...' : ''}"
+                ${flashcardParaExcluir.imagem ? '<br><strong>Contém imagem:</strong> Sim' : ''}
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function confirmarExclusao() {
+            if (!flashcardParaExcluir) return;
+            const idParaExcluir = flashcardParaExcluir.id;
+            flashcards = flashcards.filter(fc => fc.id !== idParaExcluir);
+            flashcardsEstudo = flashcardsEstudo.filter(fc => fc.id !== idParaExcluir);
+            imageCache.delete(idParaExcluir);
+            salvarDados();
+            const modal = document.getElementById('modal-confirmacao');
+            if (modal) modal.classList.add('hidden');
+            mostrarFeedback('Flashcard excluído com sucesso!', 'erro');
+            if (indiceAtual < flashcardsEstudo.length) {
+                mostrarFlashcard();
+            } else {
+                finalizarEstudo();
+            }
+            flashcardParaExcluir = null;
+        }
+
+        function cancelarExclusao() {
+            flashcardParaExcluir = null;
+            const modal = document.getElementById('modal-confirmacao');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        // ============ MODO DE ESTUDO ============
+
+        function estudar(materia) {
+            materiaAtual = materia;
+            const todosFlashcards = flashcards.filter(fc => (fc.materia || 'Geral') === materia);
+            if (todosFlashcards.length === 0) {
+                mostrarFeedback('Nenhum flashcard encontrado para esta matéria!', 'erro');
+                return;
+            }
+            flashcardsEstudo = todosFlashcards.sort((a, b) => {
+                const aDue = estaParaRevisar(a);
+                const bDue = estaParaRevisar(b);
+                if (aDue && !bDue) return -1;
+                if (!aDue && bDue) return 1;
+                const aData = new Date(a.proximaRevisao || 0);
+                const bData = new Date(b.proximaRevisao || 0);
+                return aData - bData;
+            });
+            indiceAtual = 0;
+            mostrandoResposta = false;
+            
+            // Esconder abas e mostrar modo estudo
+            document.querySelector('.tab-nav').classList.add('hidden');
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('ativo');
+            });
+            
+            const modoEstudo = document.getElementById('modo-estudo');
+            const materiaAtualTitulo = document.getElementById('materia-atual-titulo');
+            
+            if (modoEstudo) modoEstudo.classList.remove('hidden');
+            if (materiaAtualTitulo) materiaAtualTitulo.textContent = `📚 ${materia}`;
+            
+            mostrarFlashcard();
+        }
+
+        function mostrarFlashcard() {
+            if (indiceAtual >= flashcardsEstudo.length) {
+                finalizarEstudo();
+                return;
+            }
+            const fc = flashcardsEstudo[indiceAtual];
+            const texto = document.getElementById('flashcard-texto');
+            const revisaoInfo = document.getElementById('revisao-info');
+            const imageContainer = document.getElementById('flashcard-image-container');
+            if (!texto || !revisaoInfo) return;
+            texto.textContent = fc.pergunta;
+            texto.dataset.resposta = fc.resposta;
+            texto.style.color = 'var(--flashcard-text)';
+            if (imageContainer) {
+                imageContainer.innerHTML = '';
+                if (fc.imagem) {
+                    const imagemSrc = obterImagemCache(fc.id) || fc.imagem;
+                    const imgElement = document.createElement('img');
+                    imgElement.src = imagemSrc;
+                    imgElement.className = 'flashcard-image';
+                    imgElement.alt = 'Imagem do flashcard';
+                    imgElement.onclick = (e) => {
+                        e.stopPropagation();
+                        abrirLightbox(imagemSrc);
+                    };
+                    imageContainer.appendChild(imgElement);
+                    cacheImagem(fc.id, imagemSrc);
+                }
+            }
+            const intervaloTexto = fc.intervalo > 0 ? `Intervalo: ${fc.intervalo} dia(s)` : 'Novo';
+            const estaDue = estaParaRevisar(fc);
+            revisaoInfo.textContent = `${intervaloTexto} | Nível: ${fc.repeticao}${estaDue ? ' | 🔴 PARA REVISAR' : ''}${fc.imagem ? ' | 🖼️' : ''}`;
+            revisaoInfo.style.color = estaDue ? 'var(--danger)' : 'var(--text-muted)';
+            mostrandoResposta = false;
+            const botoesResposta = document.getElementById('botoes-resposta');
+            if (botoesResposta) botoesResposta.classList.add('hidden');
+            atualizarProgresso();
+        }
+
+        function mostrarResposta() {
+            const texto = document.getElementById('flashcard-texto');
+            if (!texto || mostrandoResposta || !texto.dataset.resposta) return;
+            texto.textContent = texto.dataset.resposta;
+            texto.style.color = 'var(--success)';
+            mostrandoResposta = true;
+            const botoesResposta = document.getElementById('botoes-resposta');
+            if (botoesResposta) botoesResposta.classList.remove('hidden');
+        }
+
+        function responder(qualidade) {
+            if (indiceAtual >= flashcardsEstudo.length) return;
+            const fc = flashcardsEstudo[indiceAtual];
+            const flashcardOriginal = flashcards.find(f => f.id === fc.id);
+            if (flashcardOriginal) {
+                atualizarRepeticaoEspacada(flashcardOriginal, qualidade);
+            }
+            salvarDados();
+            const flashcardEl = document.getElementById('flashcard');
+            if (flashcardEl) {
+                flashcardEl.classList.add(qualidade >= 2 ? 'flash-acerto' : 'flash-erro');
+                setTimeout(() => {
+                    flashcardEl.classList.remove('flash-acerto', 'flash-erro');
+                }, 500);
+            }
+            indiceAtual++;
+            if (indiceAtual < flashcardsEstudo.length) {
+                setTimeout(mostrarFlashcard, 300);
+            } else {
+                setTimeout(finalizarEstudo, 300);
+            }
+        }
+
+        function finalizarEstudo() {
+            const container = document.getElementById('modo-estudo');
+            if (!container) return;
+            const totalEstudados = flashcardsEstudo.length;
+            if (totalEstudados === 0) {
+                voltarInicio();
+                return;
+            }
+            const acertosSessao = flashcardsEstudo.filter(fc => {
+                const original = flashcards.find(f => f.id === fc.id);
+                return original && original.historico && original.historico.length > 0 &&
+                    original.historico[original.historico.length - 1].qualidade >= 2;
+            }).length;
+            const taxaAcertos = totalEstudados > 0 ? Math.round((acertosSessao / totalEstudados) * 100) : 0;
+            container.innerHTML = `
+                <div class="card">
+                    <div class="card-header" style="text-align: center; justify-content: center;">
+                        <div>
+                            <h1 style="font-size: 3rem; margin: 0;">🎉</h1>
+                            <h2 style="margin: 8px 0 0;">Estudo Concluído!</h2>
+                            <p style="color: var(--text-muted); margin-top: 8px;">
+                                Você completou ${totalEstudados} flashcards de ${materiaAtual}!
+                            </p>
+                            <p style="color: var(--text-muted);">
+                                <strong>Acertos:</strong> ${acertosSessao} | <strong>Taxa:</strong> ${taxaAcertos}%
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary" onclick="voltarInicio()">📚 Voltar</button>
+                            <button type="button" class="btn btn-success" onclick="estudar('${materiaAtual.replace(/"/g, '&quot;')}')">🔄 Revisar Novamente</button>
+                            <button type="button" class="btn btn-info" onclick="voltarInicio(); setTimeout(() => alternarAba('estatisticas'), 100);">📊 Estatísticas</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function voltarInicio() {
+            const modoEstudo = document.getElementById('modo-estudo');
+            if (modoEstudo) modoEstudo.classList.add('hidden');
+            
+            // Restaurar navegação por abas
+            document.querySelector('.tab-nav').classList.remove('hidden');
+            alternarAba('estudar');
+            
+            // Restaurar conteúdo do modo estudo
+            if (modoEstudo) {
+                modoEstudo.innerHTML = `
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 id="materia-atual-titulo" style="margin: 0;">📚 Matéria</h2>
+                            <button type="button" class="btn btn-outline btn-sm" onclick="voltarInicio()">🏠 Voltar</button>
+                        </div>
+                        <div class="card-body" style="padding: 0;">
+                            <div class="progress-bar" style="margin: 0; border-radius: 0; height: 4px;">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                            <div class="flashcard" id="flashcard" onclick="mostrarResposta()" style="border: none; border-radius: 0; box-shadow: none;">
+                                <div class="revisao-info" id="revisao-info"></div>
+                                <div id="flashcard-image-container"></div>
+                                <div class="flashcard-text" id="flashcard-texto">Clique para começar</div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p id="contador" style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 12px;">Flashcard 0 de 0</p>
+                            <div class="btn-group hidden" id="botoes-resposta">
+                                <button type="button" class="btn btn-danger" onclick="responder(0)">🔴 Errei (1)</button>
+                                <button type="button" class="btn btn-warning" onclick="responder(1)">🟡 Difícil (2)</button>
+                                <button type="button" class="btn btn-success" onclick="responder(2)">🟢 Acertei (3)</button>
+                                <button type="button" class="btn btn-info" onclick="responder(3)">🔵 Fácil (4)</button>
+                                <button type="button" class="btn btn-danger" onclick="excluirFlashcardAtual()">🗑️ Excluir (Del)</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            mostrarMaterias();
+        }
+
+        function atualizarProgresso() {
+            if (flashcardsEstudo.length === 0) {
+                const progressFill = document.getElementById('progress-fill');
+                const contador = document.getElementById('contador');
+                if (progressFill) progressFill.style.width = '0%';
+                if (contador) contador.textContent = 'Flashcard 0 de 0';
+                return;
+            }
+            const progresso = ((indiceAtual) / flashcardsEstudo.length) * 100;
+            const progressFill = document.getElementById('progress-fill');
+            const contador = document.getElementById('contador');
+            if (progressFill) progressFill.style.width = progresso + '%';
+            if (contador) contador.textContent = `Flashcard ${indiceAtual + 1} de ${flashcardsEstudo.length}`;
+        }
+
+        // ============ INICIALIZAÇÃO ============
+
+        function inicializar() {
+            console.log('Inicializando aplicação...');
+            
+            inicializarTema();
+            
+            const modal = document.getElementById('modal-confirmacao');
+            if (modal) modal.classList.add('hidden');
+            
+            const modoEstudo = document.getElementById('modo-estudo');
+            if (modoEstudo) modoEstudo.classList.add('hidden');
+            
+            flashcards = carregarDados();
+            
+            if (flashcards.length === 0) {
+                const hoje = new Date();
+                flashcards = [{
                     id: 1,
                     materia: 'Cardiologia',
                     pergunta: 'O que é hipertensão arterial?',
                     resposta: 'É a elevação persistente da pressão arterial acima de 140/90 mmHg',
                     acertos: 0,
                     erros: 0,
-                    dataCriacao: new Date().toLocaleDateString('pt-BR')
-                },
-                {
+                    dataCriacao: hoje.toLocaleDateString('pt-BR'),
+                    repeticao: 0,
+                    intervalo: 0,
+                    fatorFacilidade: FATOR_FACILIDADE_INICIAL,
+                    proximaRevisao: hoje.toISOString(),
+                    historico: [],
+                    imagem: null
+                }, {
                     id: 2,
                     materia: 'Neurologia',
                     pergunta: 'Quais são os sinais clássicos de AVC?',
                     resposta: 'Fraqueza facial, fraqueza nos braços e dificuldade na fala (FAST)',
                     acertos: 0,
                     erros: 0,
-                    dataCriacao: new Date().toLocaleDateString('pt-BR')
-                },
-                {
+                    dataCriacao: hoje.toLocaleDateString('pt-BR'),
+                    repeticao: 0,
+                    intervalo: 0,
+                    fatorFacilidade: FATOR_FACILIDADE_INICIAL,
+                    proximaRevisao: hoje.toISOString(),
+                    historico: [],
+                    imagem: null
+                }, {
                     id: 3,
                     materia: 'Farmacologia',
                     pergunta: 'Qual o mecanismo de ação da aspirina?',
                     resposta: 'Inibe a ciclooxigenase (COX), reduzindo a produção de prostaglandinas',
                     acertos: 0,
                     erros: 0,
-                    dataCriacao: new Date().toLocaleDateString('pt-BR')
-                }
-            ];
-            salvarDados();
-        }
-        
-        // Variáveis de estudo
-        let flashcardsEstudo = [];
-        let indiceAtual = 0;
-        let materiaAtual = '';
-        let mostrandoResposta = false;
-        
-        // ============ FUNÇÕES PRINCIPAIS ============
-        
-        function salvarDados() {
-            localStorage.setItem('flashcards', JSON.stringify(flashcards));
-            atualizarEstatisticas();
-            mostrarMaterias();
-        }
-        
-        function criarFlashcard() {
-            const materia = document.getElementById('materia').value.trim();
-            const pergunta = document.getElementById('pergunta').value.trim();
-            const resposta = document.getElementById('resposta').value.trim();
-            
-            const feedback = document.getElementById('mensagem-feedback');
-            
-            if (materia && pergunta && resposta) {
-                // Criar novo flashcard
-                const flashcard = {
-                    id: Date.now(), // ID único
-                    materia: materia,
-                    pergunta: pergunta,
-                    resposta: resposta,
-                    acertos: 0,
-                    erros: 0,
-                    dataCriacao: new Date().toLocaleDateString('pt-BR')
-                };
-                
-                flashcards.push(flashcard);
+                    dataCriacao: hoje.toLocaleDateString('pt-BR'),
+                    repeticao: 0,
+                    intervalo: 0,
+                    fatorFacilidade: FATOR_FACILIDADE_INICIAL,
+                    proximaRevisao: hoje.toISOString(),
+                    historico: [],
+                    imagem: null
+                }];
                 salvarDados();
-                
-                // Limpar campos
-                document.getElementById('pergunta').value = '';
-                document.getElementById('resposta').value = '';
-                
-                // Feedback positivo
-                feedback.innerHTML = '<div class="alert alert-success">✅ Flashcard criado com sucesso!</div>';
-                
-                // Animação do botão
-                const btn = document.querySelector('button');
-                btn.textContent = '✅ Criado!';
-                btn.style.background = '#28a745';
-                
-                setTimeout(() => {
-                    btn.textContent = '➕ Criar Flashcard';
-                    btn.style.background = '#667eea';
-                    feedback.innerHTML = '';
-                }, 2000);
-                
             } else {
-                feedback.innerHTML = '<div class="alert alert-danger">❌ Preencha todos os campos!</div>';
-                
-                setTimeout(() => {
-                    feedback.innerHTML = '';
-                }, 3000);
+                atualizarEstatisticas();
+                mostrarMaterias();
+                atualizarInfoBackup();
             }
+            
+            console.log('Aplicação inicializada com sucesso!');
         }
-        
-        function mostrarMaterias() {
-            // Agrupar por matéria
-            const materias = {};
-            flashcards.forEach(fc => {
-                if (!materias[fc.materia]) materias[fc.materia] = [];
-                materias[fc.materia].push(fc);
-            });
-            
-            const lista = document.getElementById('materias-lista');
-            lista.innerHTML = '';
-            
-            if (Object.keys(materias).length === 0) {
-                lista.innerHTML = '<p style="color: white; text-align: center;">Nenhuma matéria criada ainda.</p>';
+
+        // ============ ATALHOS DE TECLADO ============
+
+        document.addEventListener('keydown', function(e) {
+            const modoEstudo = document.getElementById('modo-estudo');
+            const modalConfirmacao = document.getElementById('modal-confirmacao');
+            const lightbox = document.getElementById('lightbox');
+            const modoEstudoAtivo = modoEstudo && !modoEstudo.classList.contains('hidden');
+            const modalAberto = modalConfirmacao && !modalConfirmacao.classList.contains('hidden');
+            const lightboxAberto = lightbox && !lightbox.classList.contains('hidden');
+
+            // ESC fecha lightbox
+            if (e.key === 'Escape' && lightboxAberto) {
+                e.preventDefault();
+                fecharLightbox();
                 return;
             }
             
-            Object.keys(materias).forEach(materia => {
-                const div = document.createElement('div');
-                div.className = 'materia-tab';
-                div.innerHTML = `
-                    <div>
-                        <strong style="color: #667eea;">${materia}</strong>
-                        <span style="color: #666; margin-left: 10px;">${materias[materia].length} flashcards</span>
-                    </div>
-                    <span style="color: #999;">→</span>
-                `;
-                div.onclick = () => estudar(materia);
-                lista.appendChild(div);
-            });
-        }
-        
-        function atualizarEstatisticas() {
-            const total = flashcards.length;
-            const materias = new Set(flashcards.map(fc => fc.materia));
-            const acertos = flashcards.reduce((sum, fc) => sum + (fc.acertos || 0), 0);
-            const erros = flashcards.reduce((sum, fc) => sum + (fc.erros || 0), 0);
-            
-            document.getElementById('total-flashcards').textContent = total;
-            document.getElementById('total-materias').textContent = materias.size;
-            document.getElementById('total-acertos').textContent = acertos;
-            document.getElementById('total-erros').textContent = erros;
-        }
-        
-        // ============ MODO DE ESTUDO ============
-        
-        function estudar(materia) {
-            materiaAtual = materia;
-            flashcardsEstudo = flashcards.filter(fc => fc.materia === materia);
-            indiceAtual = 0;
-            mostrandoResposta = false;
-            
-            if (flashcardsEstudo.length > 0) {
-                // Embaralhar flashcards
-                flashcardsEstudo = embaralhar(flashcardsEstudo);
-                
-                // Mostrar modo estudo
-                document.getElementById('materias-lista').classList.add('hidden');
-                document.getElementById('modo-estudo').classList.remove('hidden');
-                document.getElementById('materia-atual-titulo').textContent = `📚 ${materia}`;
-                
-                mostrarFlashcard();
+            // ESC fecha modal
+            if (e.key === 'Escape' && modalAberto) {
+                e.preventDefault();
+                cancelarExclusao();
+                return;
             }
-        }
-        
-        function mostrarFlashcard() {
-            const fc = flashcardsEstudo[indiceAtual];
-            const texto = document.getElementById('flashcard-texto');
             
-            texto.textContent = fc.pergunta;
-            texto.dataset.resposta = fc.resposta;
-            texto.style.color = '#333';
-            
-            mostrandoResposta = false;
-            
-            // Esconder botões de resposta
-            document.getElementById('botoes-resposta').classList.add('hidden');
-            
-            // Atualizar progresso
-            atualizarProgresso();
-        }
-        
-        function mostrarResposta() {
-            const texto = document.getElementById('flashcard-texto');
-            
-            if (!mostrandoResposta) {
-                texto.textContent = texto.dataset.resposta;
-                texto.style.color = '#28a745';
-                mostrandoResposta = true;
-                
-                // Mostrar botões de resposta
-                document.getElementById('botoes-resposta').classList.remove('hidden');
+            // T alterna tema
+            if (e.key === 't' && !modoEstudoAtivo && !modalAberto && !lightboxAberto) {
+                e.preventDefault();
+                alternarTema();
+                return;
             }
-        }
-        
-        function responder(acertou) {
-            const fc = flashcardsEstudo[indiceAtual];
             
-            // Atualizar estatísticas
-            const flashcardOriginal = flashcards.find(f => f.id === fc.id);
-            if (flashcardOriginal) {
-                if (acertou) {
-                    flashcardOriginal.acertos = (flashcardOriginal.acertos || 0) + 1;
+            // S alterna para estatísticas
+            if (e.key === 's' && !modoEstudoAtivo && !modalAberto && !lightboxAberto) {
+                e.preventDefault();
+                if (abaAtual === 'estatisticas') {
+                    alternarAba('estudar');
                 } else {
-                    flashcardOriginal.erros = (flashcardOriginal.erros || 0) + 1;
+                    alternarAba('estatisticas');
                 }
+                return;
             }
             
-            salvarDados();
-            
-            // Avançar para próximo
-            indiceAtual++;
-            
-            if (indiceAtual < flashcardsEstudo.length) {
-                mostrarFlashcard();
-            } else {
-                finalizarEstudo();
-            }
-        }
-        
-        function finalizarEstudo() {
-            const container = document.getElementById('modo-estudo');
-            container.innerHTML = `
-                <div class="header" style="margin-bottom: 20px;">
-                    <h1 style="font-size: 3em;">🎉</h1>
-                    <h2>Estudo Concluído!</h2>
-                    <p style="margin: 20px 0; color: #666;">
-                        Você completou todos os ${flashcardsEstudo.length} flashcards de ${materiaAtual}!
-                    </p>
-                </div>
-                <div class="botoes-container">
-                    <button class="btn-success" onclick="voltarInicio()">📚 Voltar ao Início</button>
-                    <button onclick="estudar('${materiaAtual}')">🔄 Estudar Novamente</button>
-                </div>
-            `;
-        }
-        
-        function voltarInicio() {
-            document.getElementById('materias-lista').classList.remove('hidden');
-            document.getElementById('modo-estudo').classList.add('hidden');
-            
-            // Restaurar conteúdo original do modo estudo
-            document.getElementById('modo-estudo').innerHTML = `
-                <div class="header" style="margin-bottom: 20px;">
-                    <h2 id="materia-atual-titulo" style="margin-bottom: 10px;">📚 Matéria</h2>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progress-fill"></div>
-                    </div>
-                    <p id="contador">Flashcard 1 de 1</p>
-                </div>
-                
-                <div class="flashcard" id="flashcard" onclick="mostrarResposta()">
-                    <div class="flashcard-text" id="flashcard-texto">Clique para começar</div>
-                </div>
-                
-                <div class="botoes-container hidden" id="botoes-resposta">
-                    <button class="btn-success" onclick="responder(true)">✅ Acertei</button>
-                    <button class="btn-danger" onclick="responder(false)">❌ Errei</button>
-                </div>
-                
-                <div class="botoes-container">
-                    <button class="btn-warning" onclick="voltarInicio()">🏠 Voltar</button>
-                </div>
-            `;
-            
-            mostrarMaterias();
-        }
-        
-        function atualizarProgresso() {
-            const progresso = ((indiceAtual) / flashcardsEstudo.length) * 100;
-            document.getElementById('progress-fill').style.width = progresso + '%';
-            document.getElementById('contador').textContent = 
-                `Flashcard ${indiceAtual + 1} de ${flashcardsEstudo.length}`;
-        }
-        
-        // ============ FUNÇÕES AUXILIARES ============
-        
-        function embaralhar(array) {
-            const novoArray = [...array];
-            for (let i = novoArray.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [novoArray[i], novoArray[j]] = [novoArray[j], novoArray[i]];
-            }
-            return novoArray;
-        }
-        
-        // ============ ATALHOS DE TECLADO ============
-        
-        document.addEventListener('keydown', function(e) {
             // Ctrl+Enter para criar flashcard
             if (e.key === 'Enter' && e.ctrlKey) {
                 e.preventDefault();
-                criarFlashcard();
+                alternarAba('criar');
+                return;
             }
             
             // Espaço para mostrar resposta
-            if (e.key === ' ' && !document.getElementById('modo-estudo').classList.contains('hidden')) {
+            if (e.key === ' ' && modoEstudoAtivo && !modalAberto && !lightboxAberto) {
                 e.preventDefault();
                 mostrarResposta();
+                return;
             }
             
-            // ESC para voltar
-            if (e.key === 'Escape' && !document.getElementById('modo-estudo').classList.contains('hidden')) {
+            // Teclas 1-4 para responder
+            if (modoEstudoAtivo && !modalAberto && !lightboxAberto) {
+                const botoesResposta = document.getElementById('botoes-resposta');
+                if (botoesResposta && !botoesResposta.classList.contains('hidden')) {
+                    const teclasResposta = {
+                        '1': 0,
+                        '2': 1,
+                        '3': 2,
+                        '4': 3
+                    };
+                    if (teclasResposta.hasOwnProperty(e.key)) {
+                        e.preventDefault();
+                        responder(teclasResposta[e.key]);
+                        return;
+                    }
+                    if (e.key === 'Delete' || e.key === 'Backspace') {
+                        e.preventDefault();
+                        excluirFlashcardAtual();
+                        return;
+                    }
+                }
+            }
+            
+            // ESC para voltar do modo estudo
+            if (e.key === 'Escape' && modoEstudoAtivo && !modalAberto && !lightboxAberto) {
+                e.preventDefault();
                 voltarInicio();
             }
         });
-        
-        // ============ INICIALIZAÇÃO ============
-        
-        atualizarEstatisticas();
-        mostrarMaterias();
+
+        // Iniciar aplicação quando o DOM estiver pronto
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', inicializar);
+        } else {
+            inicializar();
+        }
     </script>
 </body>
 </html>
